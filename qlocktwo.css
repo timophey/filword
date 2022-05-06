@@ -79,7 +79,7 @@ ul.qlocktwo__letters{
 }
 .light,.touch .qlocktwo__letters a, .qlocktwo__letters a:hover{
     color:hsla(0,0%,100%,.8)!important;
-    text-shadow:0 0 2px #fff;
+    text-shadow:0 0 2px #F44;
 }
 .qlocktwo__letters__7 span{width: 2.3em;}
 .qlocktwo__dots{position:absolute;font-size:.4em}
