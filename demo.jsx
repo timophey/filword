@@ -19,7 +19,7 @@ class App_Demo extends React.Component{
     ss = false;
     print_buffer = [];
     shift_buffer = [];
-    _switchDelay = 2500;
+    _switchDelay = 3500;
     _pd = 75;
     _currentWord = 0;
     _wordInterval = 0;
