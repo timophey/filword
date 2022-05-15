@@ -1,19 +1,19 @@
 class App_Demo extends React.Component{
 
     letters = [
-        "МИРБУДУЩЕЕСЧА",
-        "СВПРОГРЕССТЬЕ",
-        "ЛЛИОНЫПРОШОБО",
-        "КОМТРУДЯЩИЕСЯ",
-        "МУНЛОЖЬДРУЖБА",
-        "ГУММАНИЗМРАЧН",
-        "КУЧКАПИТАКВАС",
-        "ВРАЖДАРЕГРЕСС",
-        "ВАРВАРСТНЕСЧА",
-        "ПРАВДАСТЬЕИЗМ",
-        "ЭКСПЛУАТЕТЛОЕ",
-        "РАБОСТВОЙНАЛИ",
-        "КОКАКОЛАЦИЯЗМ"
+        "МИБУДУЩЕЧАСТЬ",
+        "ИРПРОГРЕССЛОЕ",
+        "ЛВОБОДАПРОШЖЬ",
+        "ЛСВРАЖРEАВДАЯ",
+        "ИОНЫИЗМГРЕССН",
+        "ГУМАНМРАЧНОЕИ",
+        "КУЧКАПИТАЛИЗМ",
+        "ВТРУДЯЩИЕСЧАС",
+        "АРВАРОРГНЯКВТ",
+        "КРАБСТВОЙНАЕЬ",
+        "ОЭКСПЛУАТАЦИЯ",
+        "МКОДРУЖБАКОЛА",
+        "МУНИЗМСВЕТЛОЕ",
     ];
 
     ss = false;
@@ -22,6 +22,8 @@ class App_Demo extends React.Component{
     _switchDelay = 2500;
     _pd = 75;
     _currentWord = 0;
+    _wordInterval = 0;
+    _f = false;
     // 
 
     constructor(props){
@@ -29,19 +31,30 @@ class App_Demo extends React.Component{
         this.state = {
             leds: [], // 110 LEDS
         }
-        //this.scheduledHourMin();
-        // setInterval(this.scheduledHourMin.bind(this),this._switchDelay);
         setInterval(this._type.bind(this),this._pd);
-        setInterval(this.scheduledWord.bind(this),this._switchDelay);
+        this._wordInterval = setInterval(this.scheduledWord.bind(this),this._switchDelay);
+        document.addEventListener('keyup',(function(e){
+            if(e.code == 'Space'){
+                if(this._wordInterval){ clearInterval(this._wordInterval); this._wordInterval = 0; return; }
+                this._wordInterval = setInterval(this.scheduledWord.bind(this),this._switchDelay);
+            }
+            if(e.code == 'Escape'){
+                this._tail();
+            }
+            if(e.key == 'f'){
+                this._f = !this._f;
+            }
+        }).bind(this))
     }
 
     scheduledWord(){
         let word = this.words[this._currentWord];
-        this.lightsDown();
+        if(!this._f && this._currentWord % 2 == 0) this.lightsDown();
         this.lightsUp(word,word.length);
         let td = (this._switchDelay) - ((this.print_buffer.length+1) * 1 * this._pd);
-        setTimeout(this._tail.bind(this),td);
+        if(!this._f) setTimeout(this._tail.bind(this),td);
         this._currentWord++; if( this._currentWord == this.words.length ) this._currentWord = 0;
+        if(this._currentWord % 2) this.scheduledWord();
     }
 
     lightsDown(){
@@ -69,7 +82,7 @@ class App_Demo extends React.Component{
         leds[l] = true;
         this.shift_buffer.push(l);
         this.setState({leds:leds});
-        // console.log(this.shift_buffer.map(n=>+n)); // распечатываем массив из буфера
+        console.log(this.shift_buffer.map(n=>+n)); // распечатываем массив из буфера
     }
 
     _tail(){
@@ -85,7 +98,7 @@ class App_Demo extends React.Component{
 
     highlightOne(e){
         // подсвечиваем кликнутую точку
-        return;
+        // return;
         let n = e.target.dataset.n;
         this.print_buffer.push(n);
 
@@ -113,31 +126,33 @@ class App_Demo extends React.Component{
     }
 
     words = [
-        [0, 1, 2], // мир
-        [149, 148, 147, 146, 145], // война
-        [10, 11, 12, 16, 15, 14, 13], // счастье
-        [112, 113, 114, 115, 116, 123, 122, 121, 120], // несчастье
-        [0, 1, 26, 27, 28, 29, 30, 31], // миллионы
+        [0, 1, 24], // мир
+        [123, 122, 121, 120, 119], // война
+        [17, 8, 9, 10, 11, 12, 13], // счастье
+        [112, 95, 94, 93, 92, 91, 116, 117, 118], // несчастье
+        [0, 25, 26, 51, 52, 53, 54, 55], // миллионы
         [78, 79, 80, 81, 82], // кучка
-        [48, 47, 46, 45, 44, 43, 42, 41, 40, 39], // трудящиеся
-        [130, 131, 132, 133, 134, 135, 136, 137, 163, 164, 165, 166], // эксплуатация
-        [3, 4, 5, 6, 7, 8, 9], // будущее
-        [32, 33, 34, 35, 140, 141, 142], // прошлое
-        [25, 24, 138, 139, 140, 141, 142], // светлое
-        [69, 68, 67, 66, 65, 141, 142], // мрачное
-        [51, 50, 49, 52, 53, 54, 72, 71, 70, 69], // коммунизм
-        [81, 82, 83, 84, 85, 86, 144, 143, 167, 168], // капитализм
+        [102, 101, 100, 99, 98, 97, 96, 95, 94, 113], // трудящиеся
+        [131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142], // эксплуатация
+        [2, 3, 4, 5, 6, 7, 18], // будущее
+        [33, 34, 35, 36, 15, 14, 13], // прошлое
+        [162, 163, 164, 165, 166, 167, 168], // светлое
+        [72, 71, 70, 69, 68, 67, 66], // мрачное
+        [129, 130, 155, 156, 157, 158, 159, 160, 161], // коммунизм
+        [81, 82, 83, 84, 85, 86, 87, 88, 89, 90], // капитализм
         [23, 22, 21, 20, 19, 18, 17, 16], // прогресс
-        [97, 96, 95, 94, 93, 92, 91], // регресс
-        [59, 60, 61, 62, 63, 64], // дружба
-        [103, 102, 101, 100, 99, 98], // вражда
-        [129, 128, 127, 126, 125, 124], // правда
-        [55, 56, 57, 57, 58], // ложь
-        [77, 76, 75, 74, 73, 72, 71, 70, 69], // гумманизм
-        [104, 105, 106, 107, 108, 109, 110, 111, 149, 148], // варварство
-        [25, 24, 36, 37, 38, 99, 98], // свобода
-        [155, 154, 153, 151, 150, 149, 148], // рабство
-        [87, 88, 89, 90], // квас
-        [156, 157, 158, 159, 160, 161, 162, 163], // кокакола
+        [45, 44, 59, 60, 61, 62, 63], // регресс
+        [152, 151, 150, 149, 148, 147], // дружба
+        [49, 48, 47, 46, 31, 32], // вражда
+        [33, 34, 43, 42, 41, 40], // правда
+        [15, 14, 37, 38], // ложь
+        [77, 76, 75, 74, 73, 56, 57, 58], // гумманизм
+        [103, 104, 105, 106, 107, 108, 125, 124, 123, 122], // варварство
+        [50, 27, 28, 29, 30, 31, 32], // свобода
+        [128, 127, 126, 125, 124, 123, 122], // рабство
+        [114, 115, 92, 91], // квас
+        [154, 153, 132, 127, 146, 145, 144, 143], // кокакола
+        [41, 40, 39, 64, 65, 66], // даяние
+        [124, 109, 110, 111], // торг
     ];
 }
